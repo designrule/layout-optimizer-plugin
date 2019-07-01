@@ -1,0 +1,31 @@
+{
+  "name": "layout-optimizer-plugin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "expose-loader": "^0.7.5",
+    "j-toker": "^0.0.10-beta3",
+    "webpack-dev-server": "^3.7.2",
+    "webpack-cli": "^3.3.5",
+    "webpack": "^4.35.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/designrule/layout-optimizer-plugin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "NOLICENSED",
+  "bugs": {
+    "url": "https://github.com/designrule/layout-optimizer-plugin/issues"
+  },
+  "homepage": "https://github.com/designrule/layout-optimizer-plugin#readme"
+}
