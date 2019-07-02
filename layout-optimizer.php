@@ -70,24 +70,18 @@ class LayoutOptimizer {
 
     /** 設定画面の項目データベースに保存する */
     function save_config(){
-
         // nonceで設定したcredentialのチェック
-        if (isset($_POST[self::CREDENTIAL_ACTION]) && $_POST[self::CREDENTIAL_NAME]) {
+        if (isset($_POST[self::CREDENTIAL_NAME]) && $_POST[self::CREDENTIAL_NAME]) {
             if (check_admin_referer(self::CREDENTIAL_ACTION, self::CREDENTIAL_NAME)) {
                 // 保存処理
                 $key = "_data";
-				if($_POST['view_id']) {
-					$data = get_option(self::PLUGIN_DB_PREFIX . "_data");
-					$data['view_id'] = $_POST['view_id'];
-				}else {
-					$data = [
-						"email" => $_POST['email'] ? $_POST['email'] : "",
-						"uid" => $_POST['uid'] ? $_POST['uid'] : "",
-						"client" => $_POST['client'] ? $_POST['client'] : "",
-						"expiry" => $_POST['expiry'] ? $_POST['expiry'] : "",
-						"access_token" => $_POST['access_token'] ? $_POST['access_token'] : ""
-					];
-				}
+				$data = [
+					"email" => $_POST['email'] ? $_POST['email'] : "",
+					"uid" => $_POST['uid'] ? $_POST['uid'] : "",
+					"client" => $_POST['client'] ? $_POST['client'] : "",
+					"expiry" => $_POST['expiry'] ? $_POST['expiry'] : "",
+					"access_token" => $_POST['access_token'] ? $_POST['access_token'] : ""
+				];
                 update_option(self::PLUGIN_DB_PREFIX . $key, $data);
                 $completed_text = "設定の保存が完了しました。管理画面にログインした状態で、トップページにアクセスし変更が正しく反映されたか確認してください。";
 
@@ -99,7 +93,7 @@ class LayoutOptimizer {
 			}
 		}
         // nonceで設定したcredentialのチェック
-        if (isset($_POST[self::CREDENTIAL_VIEW_ACTION]) && $_POST[self::CREDENTIAL_VIEW_NAME]) {
+        if (isset($_POST[self::CREDENTIAL_VIEW_NAME]) && $_POST[self::CREDENTIAL_VIEW_NAME]) {
             if (check_admin_referer(self::CREDENTIAL_VIEW_ACTION, self::CREDENTIAL_VIEW_NAME)) {
                 // 保存処理
                 $key = "_data";
@@ -109,7 +103,7 @@ class LayoutOptimizer {
                 $completed_text = "設定の保存が完了しました。管理画面にログインした状態で、トップページにアクセスし変更が正しく反映されたか確認してください。";
 
                 // 保存が完了したら、wordpressの機構を使って、一度だけメッセージを表示する
-                //set_transient(self::COMPLETE_CONFIG, $completed_text, 5);
+                set_transient(self::COMPLETE_CONFIG, $completed_text, 5);
 
                 // 設定画面にリダイレクト
                 wp_safe_redirect(menu_page_url(self::CONFIG_MENU_SLUG), false);
