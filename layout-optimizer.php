@@ -11,12 +11,12 @@
 add_action('init', 'LayoutOptimizer::init');
 
 class LayoutOptimizer {
-	const VERSION           = '1.0.0';
+    const VERSION           = '1.0.0';
     const PLUGIN_ID         = 'layout-optimizer';
     const CREDENTIAL_ACTION = self::PLUGIN_ID . '-nonce-action';
     const CREDENTIAL_NAME   = self::PLUGIN_ID . '-nonce-key';
-    const CREDENTIAL_VIEW_ACTION = self::PLUGIN_ID . 'view-nonce-action';
-    const CREDENTIAL_VIEW_NAME   = self::PLUGIN_ID . 'view-nonce-key';
+    const CREDENTIAL_VIEW_ACTION = self::PLUGIN_ID . '-view-nonce-action';
+    const CREDENTIAL_VIEW_NAME   = self::PLUGIN_ID . '-view-nonce-key';
     const PLUGIN_DB_PREFIX  = self::PLUGIN_ID . '_';
     // config画面のslug
     const CONFIG_MENU_SLUG  = self::PLUGIN_ID . '-config';
