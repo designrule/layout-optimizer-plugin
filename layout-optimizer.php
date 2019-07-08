@@ -45,7 +45,7 @@ class LayoutOptimizer {
 		//イベントが未登録なら登録する
 		//wp_clear_scheduled_hook('my_hourly_event');
 		if(!wp_next_scheduled('my_hourly_event')) {
-			wp_schedule_single_event(time()+(60 * 5), 'my_hourly_event');
+			wp_schedule_single_event(time()+(60 * 60), 'my_hourly_event');
 		}
 	}
 
@@ -128,6 +128,19 @@ class LayoutOptimizer {
     }
 	function my_hourly_action() {
 		$this->fetch_theme();
+		$this->change_theme();
+	}
+	function change_theme() {
+		$data = get_option(self::PLUGIN_DB_PREFIX . "_data");
+		if(isset($data["theme"])){
+			if($data["theme"] == "A"){
+				switch_theme("twentyseventeen");
+			}else if($data["theme"] == "B"){
+				switch_theme("twentysixteen");
+			}else{
+				switch_theme("twentynineteen");
+			}
+		}
 	}
     function fetch_theme() {
         $data = get_option(self::PLUGIN_DB_PREFIX . "_data");
@@ -179,6 +192,7 @@ class LayoutOptimizer {
             <p>gini: <?= $data["gini_coefficient"]; ?></p>
             <p>updated at: <?= $data["last"]; ?></p>
 		    <p><?= wp_next_scheduled('my_hourly_event'); ?></p>
+		    <p><?= wp_get_theme(); ?></p>
     		<?php } ?>
         <?php } ?>
       </div>
