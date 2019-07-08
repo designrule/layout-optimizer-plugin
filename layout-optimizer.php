@@ -10,11 +10,6 @@
  */
 //define("FS_METHOD","direct");
 add_action('init', 'LayoutOptimizer::init');
-add_action('my_hourly_event', 'my_hourly_action');
-function my_hourly_action() {
-	LayoutOptimizer::fetch_theme();
-}
-
 class LayoutOptimizer {
     const VERSION           = '1.0.0';
     const PLUGIN_ID         = 'layout-optimizer';
@@ -40,17 +35,25 @@ class LayoutOptimizer {
             add_action('admin_menu', [$this, 'set_plugin_menu']);
             add_action('admin_menu', [$this, 'set_plugin_sub_menu']);
             add_action('admin_init', [$this, 'save_config']);
-			$this->my_activation();
         }
-		//register_activation_hook( __FILE__, [$this, 'my_activation']);
+		add_action('my_hourly_event', [$this, 'my_hourly_action']);
+		$this->my_activation();
+		//register_activation_hook( __FILE__, 'LayoutOptimizer::my_activation');
+		register_deactivation_hook( __FILE__, 'LayoutOptimizer::my_deactivation');
     }
 	function my_activation() {
 		//イベントが未登録なら登録する
 		//wp_clear_scheduled_hook('my_hourly_event');
 		if(!wp_next_scheduled('my_hourly_event')) {
-			wp_schedule_single_event(time()+(60 * 30), 'my_hourly_event');
+			wp_schedule_single_event(time()+(60 * 5), 'my_hourly_event');
 		}
 	}
+
+	static function my_deactivation() {
+		delete_option(self::PLUGIN_DB_PREFIX . "_data");
+		wp_clear_scheduled_hook('my_hourly_event');
+	}
+
     function set_plugin_menu()
     {
         add_menu_page(
@@ -123,7 +126,10 @@ class LayoutOptimizer {
             }
         }
     }
-    static function fetch_theme() {
+	function my_hourly_action() {
+		$this->fetch_theme();
+	}
+    function fetch_theme() {
         $data = get_option(self::PLUGIN_DB_PREFIX . "_data");
         $http = new WP_Http();
         $response = $http->get("http://docker.for.mac.host.internal:3000/api/v1/themes/{$data['view_id']}", [ "headers" => ["uid" => $data["uid"], "client" => $data["client"],"expiry" => $data["expiry"],"access-token" => $data["access_token"],"Content-Type" => "application/json"], "timeout" => 10]);
@@ -163,16 +169,16 @@ class LayoutOptimizer {
             <?php wp_nonce_field(self::CREDENTIAL_VIEW_ACTION, self::CREDENTIAL_VIEW_NAME) ?>
             <p>
               <label for="view_id">GoogleAnalyticsのview_id:</label>
-              <input type="text" name="view_id" value="<?= $data["view_id"] ?>"/>
+              <input type="text" name="view_id" value="<?= isset($data["view_id"]) ? $data["view_id"]: "" ?>"/>
             </p>
             <p><input type='submit' value='登録' class='view_id button button-primary button-large' /></p>
         </form>
-            <?php if($data["theme"]) { ?>
+            <?php if(isset($data["theme"])) { ?>
             <h2>APIの取得結果</h2>
             <p>theme: <?= $data["theme"]; ?></p>
             <p>gini: <?= $data["gini_coefficient"]; ?></p>
             <p>updated at: <?= $data["last"]; ?></p>
-		    <p><?= var_dump(wp_next_scheduled('my_hourly_event')); ?></p>
+		    <p><?= wp_next_scheduled('my_hourly_event'); ?></p>
     		<?php } ?>
         <?php } ?>
       </div>
@@ -180,3 +186,4 @@ class LayoutOptimizer {
     }
 
 }
+
