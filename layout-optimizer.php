@@ -16,10 +16,10 @@ class LayoutOptimizer {
 	const CREDENTIAL_NAME   = self::PLUGIN_ID . '-nonce-key';
 	const CREDENTIAL_VIEW_ACTION = self::PLUGIN_ID . '-view-nonce-action';
 	const CREDENTIAL_VIEW_NAME   = self::PLUGIN_ID . '-view-nonce-key';
-	const PLUGIN_DB_PREFIX  = self::PLUGIN_ID . '_';
+	const PLUGIN_DB_KEY  = self::PLUGIN_ID . '-data';
 	// config画面のslug
 	const CONFIG_MENU_SLUG  = self::PLUGIN_ID . '-config';
-	const COMPLETE_CONFIG    = self::PLUGIN_ID . '_complete';
+	const COMPLETE_CONFIG    = self::PLUGIN_ID . '-complete';
 
 	static function init() {
 		return new self();
@@ -30,6 +30,7 @@ class LayoutOptimizer {
 		if (is_admin() && is_user_logged_in()) {
 			// メニュー追加
 			add_action('admin_menu', [$this, 'set_plugin_menu']);
+			add_action('admin_notices', [$this, 'flash_messages']);
 			add_action('admin_init', [$this, 'save_config']);
 			add_action('admin_init', [$this, 'save_view_id']);
 		}
@@ -47,7 +48,7 @@ class LayoutOptimizer {
 	}
 
 	static function my_deactivation() {
-		delete_option(self::PLUGIN_DB_PREFIX . "_data");
+		delete_option(self::PLUGIN_DB_KEY);
 		wp_clear_scheduled_hook('my_hourly_event');
 	}
 	function my_hourly_action() {
@@ -55,7 +56,7 @@ class LayoutOptimizer {
 		$this->change_theme();
 	}
 	function change_theme() {
-		$data = get_option(self::PLUGIN_DB_PREFIX . "_data");
+		$data = get_option(self::PLUGIN_DB_KEY);
 		if(!empty($data["theme"])){
 			if($data["theme"] == "A"){
 				switch_theme("twentyseventeen");
@@ -70,7 +71,7 @@ class LayoutOptimizer {
 		return !(empty($data["uid"]) || empty($data["client"]) || empty($data["expiry"]) || empty($data["access_token"]));
 	}
 	function fetch_theme() {
-		$data = get_option(self::PLUGIN_DB_PREFIX . "_data");
+		$data = get_option(self::PLUGIN_DB_KEY);
 		if(!$this->is_api_login($data) && !empty($data["view_id"])) {
 			return false;
 		}
@@ -83,7 +84,7 @@ class LayoutOptimizer {
 		$data["theme"] = $res["theme"];
 		$data["gini_coefficient"] = $res["gini_coefficient"];
 		$data["last"] = time();
-		update_option(self::PLUGIN_DB_PREFIX . "_data", $data);
+		update_option(self::PLUGIN_DB_KEY, $data);
 	}
 
 	function set_plugin_menu() {
@@ -103,7 +104,6 @@ class LayoutOptimizer {
 		if (isset($_POST[self::CREDENTIAL_NAME]) && $_POST[self::CREDENTIAL_NAME]) {
 			if (check_admin_referer(self::CREDENTIAL_ACTION, self::CREDENTIAL_NAME)) {
 				// 保存処理
-				$key = "_data";
 				$data = [
 					"email" => !empty($_POST['email']) ? $_POST['email'] : "",
 					"uid" => !empty($_POST['uid']) ? $_POST['uid'] : "",
@@ -111,11 +111,11 @@ class LayoutOptimizer {
 					"expiry" => !empty($_POST['expiry']) ? $_POST['expiry'] : "",
 					"access_token" => !empty($_POST['access_token']) ? $_POST['access_token'] : ""
 				];
-				update_option(self::PLUGIN_DB_PREFIX . $key, $data);
-				$completed_text = "設定の保存が完了しました。管理画面にログインした状態で、トップページにアクセスし変更が正しく反映されたか確認してください。";
+				update_option(self::PLUGIN_DB_KEY, $data);
+				$completed_text = "連携が完了しました。";
 
 				// 保存が完了したら、wordpressの機構を使って、一度だけメッセージを表示する
-				//set_transient(self::COMPLETE_CONFIG, $completed_text, 5);
+				set_transient(self::COMPLETE_CONFIG, [$completed_text], 5);
 
 				// 設定画面にリダイレクト
 				wp_safe_redirect(menu_page_url(self::CONFIG_MENU_SLUG, false));
@@ -127,14 +127,16 @@ class LayoutOptimizer {
 		if (isset($_POST[self::CREDENTIAL_VIEW_NAME]) && $_POST[self::CREDENTIAL_VIEW_NAME]) {
 			if (check_admin_referer(self::CREDENTIAL_VIEW_ACTION, self::CREDENTIAL_VIEW_NAME)) {
 				// 保存処理
-				$key = "_data";
-				$data = get_option(self::PLUGIN_DB_PREFIX . "_data");
+				$data = get_option(self::PLUGIN_DB_KEY);
 				$data['view_id'] = !empty($_POST['view_id']) ? $_POST['view_id'] : "";
-				update_option(self::PLUGIN_DB_PREFIX . $key, $data);
-				$completed_text = "設定の保存が完了しました。管理画面にログインした状態で、トップページにアクセスし変更が正しく反映されたか確認してください。";
+				update_option(self::PLUGIN_DB_KEY, $data);
+
+				//$this->fetch_theme();
+				//$this->change_theme();
+				$completed_text = "view_idの保存が完了しました。";
 
 				// 保存が完了したら、wordpressの機構を使って、一度だけメッセージを表示する
-				//set_transient(self::COMPLETE_CONFIG, $completed_text, 5);
+				set_transient(self::COMPLETE_CONFIG, [$completed_text], 5);
 
 				// 設定画面にリダイレクト
 				wp_safe_redirect(menu_page_url(self::CONFIG_MENU_SLUG, false));
@@ -144,8 +146,12 @@ class LayoutOptimizer {
 
 	function show_config_form() {
 		wp_enqueue_script('layout-optimizer', plugins_url( '/dist/main.js', __FILE__ ), array(),date('U'));
-		$data = get_option(self::PLUGIN_DB_PREFIX . "_data");
-		include(__DIR__."/template/config_form.php");
+		$data = get_option(self::PLUGIN_DB_KEY);
+		include(__DIR__."/templates/config_form.php");
+	}
+	function flash_messages() {
+		$messages = get_transient(self::COMPLETE_CONFIG);
+		include(__DIR__."/templates/flash_messages.php");
 	}
 }
 
