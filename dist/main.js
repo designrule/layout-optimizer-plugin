@@ -81,10 +81,22 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/main.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./js/main.js");
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./js/main.js":
+/*!********************!*\
+  !*** ./js/main.js ***!
+  \********************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\");\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var j_toker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! j-toker */ \"./node_modules/j-toker/dist/jquery.j-toker.js\");\n/* harmony import */ var j_toker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(j_toker__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\njquery__WEBPACK_IMPORTED_MODULE_0___default()(async () => {\n  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.signout').on('click', async () => {\n    jquery__WEBPACK_IMPORTED_MODULE_0___default()(\"#my-submenu-form\").submit();\n  });\n\n  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.signin').on('click', async () => {\n    try {\n      await jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.configure({\n        apiUrl: 'http://localhost:3000',\n        storage: 'localStorage',\n        authProviderPaths: {\n          google: '/auth/google'\n        }\n      });\n    } catch (e) {\n      console.log(e);\n    }\n    try {\n      if (!jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.user.signedIn) {\n        const user = await jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.oAuthSignIn({ provider: 'google' });\n      }\n      const cred = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.retrieveData('authHeaders');\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"uid\"]').val(cred.uid);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"email\"]').val(jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.user.email);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"client\"]').val(cred.client);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"expiry\"]').val(cred.expiry);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=access_token]').val(cred['access-token']);\n\n      localStorage.removeItem('authHeaders');\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()(\"#my-submenu-form\").submit();\n\n      // const result = await $.ajax({\n      //    url: `http://localhost:3000/api/v1/themes/155146272`,\n      //    type: 'GET'\n      // });\n      // console.log(result);\n      // console.log(result[\"theme\"]);\n    } catch (resp) {\n      console.log(resp);\n    }\n  });\n});\n\n//# sourceURL=webpack:///./js/main.js?");
+
+/***/ }),
 
 /***/ "./node_modules/j-toker/dist/jquery.j-toker.js":
 /*!*****************************************************!*\
@@ -149,18 +161,6 @@ eval("/* WEBPACK VAR INJECTION */(function(module) {/**\n * Copyright (c) 2010,2
 /***/ (function(module, exports) {
 
 eval("module.exports = function (module) {\n\tif (!module.webpackPolyfill) {\n\t\tmodule.deprecate = function () {};\n\t\tmodule.paths = [];\n\t\t// module.parent = undefined by default\n\t\tif (!module.children) module.children = [];\n\t\tObject.defineProperty(module, \"loaded\", {\n\t\t\tenumerable: true,\n\t\t\tget: function () {\n\t\t\t\treturn module.l;\n\t\t\t}\n\t\t});\n\t\tObject.defineProperty(module, \"id\", {\n\t\t\tenumerable: true,\n\t\t\tget: function () {\n\t\t\t\treturn module.i;\n\t\t\t}\n\t\t});\n\t\tmodule.webpackPolyfill = 1;\n\t}\n\treturn module;\n};\n\n//# sourceURL=webpack:///(webpack)/buildin/module.js?");
-
-/***/ }),
-
-/***/ "./src/main.js":
-/*!*********************!*\
-  !*** ./src/main.js ***!
-  \*********************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ \"./node_modules/jquery/dist/jquery.js\");\n/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var j_toker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! j-toker */ \"./node_modules/j-toker/dist/jquery.j-toker.js\");\n/* harmony import */ var j_toker__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(j_toker__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\njquery__WEBPACK_IMPORTED_MODULE_0___default()(async () => {\n  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.signout').on('click', async () => {\n    jquery__WEBPACK_IMPORTED_MODULE_0___default()(\"#my-submenu-form\").submit();\n  });\n\n  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.signin').on('click', async () => {\n    try {\n      await jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.configure({\n        apiUrl: 'http://localhost:3000',\n        storage: 'localStorage',\n        authProviderPaths: {\n          google: '/auth/google'\n        }\n      });\n    } catch (e) {\n      console.log(e);\n    }\n    try {\n      if (!jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.user.signedIn) {\n        const user = await jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.oAuthSignIn({ provider: 'google' });\n      }\n      const cred = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.retrieveData('authHeaders');\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"uid\"]').val(cred.uid);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"email\"]').val(jquery__WEBPACK_IMPORTED_MODULE_0___default.a.auth.user.email);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"client\"]').val(cred.client);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=\"expiry\"]').val(cred.expiry);\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=access_token]').val(cred['access-token']);\n\n      localStorage.removeItem('authHeaders');\n      jquery__WEBPACK_IMPORTED_MODULE_0___default()(\"#my-submenu-form\").submit();\n\n      // const result = await $.ajax({\n      //    url: `http://localhost:3000/api/v1/themes/155146272`,\n      //    type: 'GET'\n      // });\n      // console.log(result);\n      // console.log(result[\"theme\"]);\n    } catch (resp) {\n      console.log(resp);\n    }\n  });\n});\n\n//# sourceURL=webpack:///./src/main.js?");
 
 /***/ })
 

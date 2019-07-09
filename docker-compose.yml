@@ -24,7 +24,20 @@ services:
     env_file: .env
     networks:
       - layout_optimizer_network
-
+  # composer:
+  #   image: composer
+  #   tty: true
+  #   volumes:
+  #     - .:/app
+  #   command: install
+  #   networks:
+  #     - layout_optimizer_network
+  # cli:
+  #   image: wordpress:cli
+  #   volumes:
+  #     - ./wordpress:/var/www/html
+  #   networks:
+  #     - layout_optimizer_network
 volumes:
   db_data:
     driver: local
