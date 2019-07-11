@@ -11,6 +11,7 @@ services:
     networks:
       - layout_optimizer_network
   wordpress:
+    # image: wordpress:latest
     build:
       context: .
       dockerfile: Dockerfile

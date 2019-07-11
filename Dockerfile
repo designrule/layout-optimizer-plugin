@@ -1,10 +1,19 @@
 FROM wordpress
 
-RUN apt-get update && apt-get install -y less wget subversion mysql-client
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+apt-get update && \
+apt-get install -y nodejs \
+ less \
+ wget \
+ subversion \
+ mysql-client && \
+ rm -rf /var/lib/apt/lists/*
 
-RUN wget https://phar.phpunit.de/phpunit.phar && \
-    chmod +x phpunit.phar && \
-    mv phpunit.phar /usr/local/bin/phpunit
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN wget https://phar.phpunit.de/phpunit-7.5.13.phar && \
+    chmod +x phpunit-7.5.13.phar && \
+    mv phpunit-7.5.13.phar /usr/local/bin/phpunit
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
