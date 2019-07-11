@@ -41,7 +41,7 @@ class LayoutOptimizer {
 	}
 	function my_activation() {
 		//イベントが未登録なら登録する
-		//wp_clear_scheduled_hook('my_hourly_event');
+		#wp_clear_scheduled_hook('my_hourly_event');
 		if(!wp_next_scheduled('my_hourly_event')) {
 			wp_schedule_single_event(time()+(60 * 60), 'my_hourly_event');
 		}

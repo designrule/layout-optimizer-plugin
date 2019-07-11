@@ -9,7 +9,7 @@ $(async () => {
   $('.signin').on('click', async() => {
     try {
       await $.auth.configure({
-        apiUrl: 'http://localhost:3000',
+        apiUrl: API_URL,
         storage: 'localStorage',
         authProviderPaths: {
           google: '/auth/google'
