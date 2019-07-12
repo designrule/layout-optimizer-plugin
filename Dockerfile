@@ -8,12 +8,11 @@ apt-get install -y nodejs \
  subversion \
  mysql-client && \
  rm -rf /var/lib/apt/lists/*
+ 
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV LAYOUT_OPTIMIZER_API_URL http://docker.for.mac.host.internal:3000/api/v1/themes/
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN wget https://phar.phpunit.de/phpunit-7.5.13.phar && \
-    chmod +x phpunit-7.5.13.phar && \
-    mv phpunit-7.5.13.phar /usr/local/bin/phpunit
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \

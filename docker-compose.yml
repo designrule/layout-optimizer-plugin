@@ -3,19 +3,15 @@ version: '2'
 services:
   db:
     image: mysql:5.7
-    container_name: wordpress_mysql
     volumes:
       - db_data:/var/lib/mysql
     restart: always
     env_file: .env
-    networks:
-      - layout_optimizer_network
   wordpress:
     # image: wordpress:latest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: wordpress_server
     volumes:
       - .:/var/www/html/wp-content/plugins/layout-optimizer
     depends_on:
@@ -25,24 +21,6 @@ services:
       - "80:80"
     restart: always
     env_file: .env
-    networks:
-      - layout_optimizer_network
-  # composer:
-  #   image: composer
-  #   tty: true
-  #   volumes:
-  #     - .:/app
-  #   command: install
-  #   networks:
-  #     - layout_optimizer_network
-  # cli:
-  #   image: wordpress:cli
-  #   volumes:
-  #     - ./wordpress:/var/www/html
-  #   networks:
-  #     - layout_optimizer_network
 volumes:
   db_data:
     driver: local
-networks:
-  layout_optimizer_network:
