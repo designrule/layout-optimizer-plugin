@@ -10,7 +10,6 @@
 */
 add_action( 'init', 'LayoutOptimizer::init' );
 class LayoutOptimizer {
-	const VERSION                = '1.0.0';
 	const PLUGIN_ID              = 'layout-optimizer';
 	const CREDENTIAL_ACTION      = self::PLUGIN_ID . '-nonce-action';
 	const CREDENTIAL_NAME        = self::PLUGIN_ID . '-nonce-key';
