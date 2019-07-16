@@ -2,7 +2,10 @@ workflows:
   version: 2
   main:
     jobs:
-      - php72-build
+      - php72-build:
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
       - publish-github-release:
           requires:
             - php72-build
