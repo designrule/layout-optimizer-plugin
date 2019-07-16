@@ -1,8 +1,8 @@
 <div class="wrap">
 	 <h1>Google Analyticsの設定</h1>
-        <?php if($this->is_api_login($data) && !empty($data['email'])) { ?>
+        <?php if ( $this->is_api_login($data) && !empty($data['email']) ) { ?>
         <p><?php echo esc_html($data['email']); ?>でログイン中 <input type='button' value='連携解除' class='signout button button-primary button-large'></p>
-        <?php }else{ ?>
+        <?php }else { ?>
         <p><input type='button' value='ログイン' class='signin button button-primary button-large'></p>
         <?php } ?>
         <form action="" method='post' id="my-submenu-form">
@@ -15,7 +15,7 @@
               <input type="hidden" name="access_token" value=""/>
             </p>
         </form>
-        <?php if($this->is_api_login($data)) { ?>
+        <?php if ( $this->is_api_login($data) ) { ?>
         <form action="" method='post' id="view-id-form">
             <?php wp_nonce_field(self::CREDENTIAL_VIEW_ACTION, self::CREDENTIAL_VIEW_NAME) ?>
             <p>
@@ -24,7 +24,7 @@
             </p>
             <p><input type='submit' value='登録' class='view_id button button-primary button-large' /></p>
         </form>
-            <?php if(!empty($data["theme"])) { ?>
+            <?php if ( !empty($data["theme"]) ) { ?>
             <h2>APIの取得結果</h2>
             <p>theme: <?= $data["theme"]; ?></p>
             <p>gini: <?= $data["gini_coefficient"]; ?></p>

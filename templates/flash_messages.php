@@ -1,8 +1,8 @@
-<?php if(!empty($messages)){ ?>
+<?php if ( !empty($messages) ) { ?>
 <div class="updated">
 	<ul>
-	<?php foreach($messages as $message){ ?>
-	<li><?php echo esc_html($message); ?></li>
+	<?php foreach ( $messages as $layout_optimizer_message ) { ?>
+	<li><?php echo esc_html($layout_optimizer_message); ?></li>
 	<?php } ?>
 	</ul>
 </div>

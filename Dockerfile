@@ -7,6 +7,7 @@ apt-get install -y nodejs \
  wget \
  subversion \
  mysql-client && \
+ zip && \
  rm -rf /var/lib/apt/lists/*
  
 ENV COMPOSER_ALLOW_SUPERUSER 1
