@@ -3,6 +3,14 @@ workflows:
   main:
     jobs:
       - php72-build
+      - publish-github-release:
+          requires:
+            - php72-build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
 
 version: 2
 
@@ -19,10 +27,13 @@ job-references:
   install_dependencies: &install_dependencies
     name: "Install Dependencies"
     command: |
-      sudo apt-get update && sudo apt-get install subversion
+      sudo apt-get update && sudo apt-get install -y subversion zip wget less
       sudo -E docker-php-ext-install mysqli
       sudo sh -c "printf '\ndeb http://ftp.us.debian.org/debian sid main\n' >> /etc/apt/sources.list"
       sudo apt-get update && sudo apt-get install mysql-client-5.7
+      curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+      apt-get update && \
+      apt-get install -y nodejs
 
   php_job: &php_job
     environment:
@@ -48,3 +59,15 @@ jobs:
     docker:
       - image: circleci/php:7.2
       - image: *mysql_image
+
+  publish-github-release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: "Publish Release on GitHub"
+          command: |
+            VERSION=$(my-binary --version)
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./layout-optimizer.zip

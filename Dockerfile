@@ -1,5 +1,6 @@
 FROM wordpress
 
+RUN apt-get update && apt-get install -y zip
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
 apt-get update && \
 apt-get install -y nodejs \
@@ -7,8 +8,8 @@ apt-get install -y nodejs \
  wget \
  subversion \
  mysql-client && \
- zip && \
  rm -rf /var/lib/apt/lists/*
+
  
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV LAYOUT_OPTIMIZER_API_URL http://docker.for.mac.host.internal:3000/api/v1/themes/
