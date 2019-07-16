@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require("webpack");
 module.exports = (env, argv) => {
-  const IS_DEVELOPMENT = argv.mode === 'development';
+  const IS_PRODUCTION = argv.mode === 'production';
   return {
     entry: {
       main: path.resolve(__dirname, 'js', 'main.js')
@@ -12,7 +12,7 @@ module.exports = (env, argv) => {
     },
     plugins: [
       new webpack.DefinePlugin({
-        'API_URL': JSON.stringify(IS_DEVELOPMENT ? "http://localhost:3000":"https://layout-optimizer.herokuapp.com")
+        'API_URL': JSON.stringify(IS_PRODUCTION ? "https://layout-optimizer.herokuapp.com": "http://localhost:3000")
       })
       // webpack.optimize.UglifyJsPluginを削除
     ],
