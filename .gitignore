@@ -20,3 +20,7 @@ wp-content/plugins/hello.php
 .env
 .docker/log/*
 .docker/backup/*
+node_modules
+/vendor/
+dist/*
+layout-optimizer.zip

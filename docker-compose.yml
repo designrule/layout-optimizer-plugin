@@ -3,28 +3,27 @@ version: '2'
 services:
   db:
     image: mysql:5.7
-    container_name: wordpress_mysql
     volumes:
       - db_data:/var/lib/mysql
     restart: always
     env_file: .env
-    networks:
-      - wordpress_network
   wordpress:
-    image: wordpress:latest
-    container_name: wordpress_server
+    # image: wordpress:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - ./plugins/layout-optimizer:/var/www/html/wp-content/plugins/layout-optimizer
+      - .:/var/www/html/wp-content/plugins/layout-optimizer
+      - for-testing:/tmp
     depends_on:
       - db
     ports:
       - "8000:80"
+      - "80:80"
     restart: always
     env_file: .env
-    networks:
-      - wordpress_network
 volumes:
   db_data:
     driver: local
-networks:
-  wordpress_network:
+  for-testing:
+    driver: local
