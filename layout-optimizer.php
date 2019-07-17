@@ -144,11 +144,11 @@ class LayoutOptimizer {
 				// 保存処理
 				$data            = get_option( self::PLUGIN_DB_KEY );
 				$data['view_id'] = ! empty( $_POST['view_id'] ) ? filter_input( INPUT_POST, "view_id", FILTER_VALIDATE_INT) : '';
-				if($data['view_id'] === false) {
+				if ( $data['view_id'] === false ) {
 					$e = new WP_Error();
 					$e->add('error', "view_idは数値で入力してください");
 					set_transient( self::ERROR_MESSAGE, $e->get_error_messages(), 5 );
-				}else{
+				}else {
 					update_option( self::PLUGIN_DB_KEY, $data );
 					$this->fetch_theme();
 					$this->change_theme();
