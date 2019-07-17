@@ -19,6 +19,7 @@ class LayoutOptimizer {
 	// config画面のslug
 	const CONFIG_MENU_SLUG = self::PLUGIN_ID . '-config';
 	const COMPLETE_CONFIG  = self::PLUGIN_ID . '-complete';
+	const ERROR_MESSAGE  = self::PLUGIN_ID . '-alert';
 
 	static function init() {
 		return new self();
@@ -29,6 +30,7 @@ class LayoutOptimizer {
 			// メニュー追加
 			add_action( 'admin_menu', [ $this, 'set_plugin_menu' ] );
 			add_action( 'admin_notices', [ $this, 'flash_messages' ] );
+			add_action( 'admin_notices', [ $this, 'flash_alert' ] );
 			add_action( 'admin_init', [ $this, 'save_config' ] );
 			add_action( 'admin_init', [ $this, 'save_view_id' ] );
 		}
@@ -89,7 +91,9 @@ class LayoutOptimizer {
 			]
 		);
 		if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-			return new WP_Error( $response );
+			var_dump($url);
+			var_dump($data);
+			return new $response;
 		}
 		$res                      = json_decode( $response['body'], true );
 		$data['theme']            = $res['theme'];
@@ -139,16 +143,19 @@ class LayoutOptimizer {
 			if ( check_admin_referer( self::CREDENTIAL_VIEW_ACTION, self::CREDENTIAL_VIEW_NAME ) ) {
 				// 保存処理
 				$data            = get_option( self::PLUGIN_DB_KEY );
-				$data['view_id'] = ! empty( $_POST['view_id'] ) ? $_POST['view_id'] : '';
-				update_option( self::PLUGIN_DB_KEY, $data );
-
-				$this->fetch_theme();
-				$this->change_theme();
-				$completed_text = 'view_idの保存が完了しました。';
-
-				// 保存が完了したら、WordPressの機構を使って、一度だけメッセージを表示する
-				set_transient( self::COMPLETE_CONFIG, [ $completed_text ], 5 );
-
+				$data['view_id'] = ! empty( $_POST['view_id'] ) ? filter_input( INPUT_POST, "view_id", FILTER_VALIDATE_INT) : '';
+				if($data['view_id'] === false) {
+					$e = new WP_Error();
+					$e->add('error', "view_idは数値で入力してください");
+					set_transient( self::ERROR_MESSAGE, $e->get_error_messages(), 5 );
+				}else{
+					update_option( self::PLUGIN_DB_KEY, $data );
+					$this->fetch_theme();
+					$this->change_theme();
+					$completed_text = 'view_idの保存が完了しました。';
+					// 保存が完了したら、WordPressの機構を使って、一度だけメッセージを表示する
+					set_transient( self::COMPLETE_CONFIG, [ $completed_text ], 5 );
+				}
 				// 設定画面にリダイレクト
 				wp_safe_redirect( menu_page_url( self::CONFIG_MENU_SLUG, false ) );
 			}
@@ -159,6 +166,10 @@ class LayoutOptimizer {
 		wp_enqueue_script( 'layout-optimizer', plugins_url( '/dist/main.js', __FILE__ ), array(), date( 'U' ) );
 		$data = get_option( self::PLUGIN_DB_KEY );
 		include __DIR__ . '/templates/config_form.php';
+	}
+	function flash_alert() {
+		$messages = get_transient( self::ERROR_MESSAGE );
+		include __DIR__ . '/templates/flash_alert.php';
 	}
 	function flash_messages() {
 		$messages = get_transient( self::COMPLETE_CONFIG );
