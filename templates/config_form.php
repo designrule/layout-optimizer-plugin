@@ -1,4 +1,5 @@
 <div class="wrap">
+	 <?php var_dump(get_post_meta("2", "", true)); ?>
 	 <h1>Google Analyticsの設定</h1>
         <?php if ( $this->is_api_login($data) && !empty($data['email']) ) { ?>
         <p><?php echo esc_html($data['email']); ?>でログイン中 <input type='button' value='連携解除' class='signout button button-primary button-large'></p>
@@ -18,16 +19,23 @@
         <?php if ( $this->is_api_login($data) ) { ?>
         <form action="" method='post' id="view-id-form">
             <?php wp_nonce_field(self::CREDENTIAL_VIEW_ACTION, self::CREDENTIAL_VIEW_NAME) ?>
-            <p>
+			<ul>
+            <li>
               <label for="view_id">GoogleAnalyticsのview_id:</label>
               <input type="text" name="view_id" value="<?= esc_attr(!empty($data["view_id"]) ? $data["view_id"]: ""); ?>"/>
-            </p>
+            </li>
+            <li>
+              <label for="dir">集計対象のディレクトリ:</label>
+              <input type="text" name="dir" value="<?= esc_attr(!empty($data["dir"]) ? $data["dir"]: ""); ?>"/>
+            </li>
+			</ul>
             <p><input type='submit' value='登録' class='view_id button button-primary button-large' /></p>
         </form>
             <?php if ( !empty($data["theme"]) ) { ?>
             <h2>APIの取得結果</h2>
             <p>theme: <?= $data["theme"]; ?></p>
             <p>gini: <?= $data["gini_coefficient"]; ?></p>
+            <p>json: <?= print_r($data["json"]); ?></p>
             <p>updated at: <?= $data["last"]; ?></p>
 		    <p><?= wp_next_scheduled('my_hourly_event'); ?></p>
 		    <p><?= wp_get_theme(); ?></p>

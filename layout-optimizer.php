@@ -59,8 +59,11 @@ class LayoutOptimizer {
 		$data = get_option( self::PLUGIN_DB_KEY );
 		if ( ! empty( $data['theme'] ) ) {
 			if ( 'A' === $data['theme'] ) {
+				//update_post_meta(2, "_wp_page_template", "");
 				switch_theme( 'twentyseventeen' );
 			} elseif ( 'B' === $data['theme'] ) {
+				//update_post_meta(2, "_wp_page_template", "page-1.php");
+				//update_post_meta(2, "_wp_page_template", "");
 				switch_theme( 'twentysixteen' );
 			} else {
 				switch_theme( 'twentynineteen' );
@@ -77,8 +80,9 @@ class LayoutOptimizer {
 		}
 		$http     = new WP_Http();
 		$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'http://layout-optimizer.herokuapp.com/api/v1/themes/';
+		$query    = !empty($data['dir']) ? '?dir='.urlencode($data['dir']):'';
 		$response = $http->get(
-			$url . $data['view_id'],
+			$url . $data['view_id'] . $query,
 			[
 				'headers' => [
 					'uid'          => $data['uid'],
@@ -91,13 +95,12 @@ class LayoutOptimizer {
 			]
 		);
 		if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-			var_dump($url);
-			var_dump($data);
 			return new $response;
 		}
 		$res                      = json_decode( $response['body'], true );
-		$data['theme']            = $res['theme'];
-		$data['gini_coefficient'] = $res['gini_coefficient'];
+		$data['theme']            = $res['ja']['theme'];
+		$data['gini_coefficient'] = $res['ja']['gini_coefficient'];
+		$data['json']             = $res;
 		$data['last']             = time();
 		update_option( self::PLUGIN_DB_KEY, $data );
 	}
@@ -144,6 +147,7 @@ class LayoutOptimizer {
 				// 保存処理
 				$data            = get_option( self::PLUGIN_DB_KEY );
 				$data['view_id'] = ! empty( $_POST['view_id'] ) ? filter_input( INPUT_POST, "view_id", FILTER_VALIDATE_INT) : '';
+				$data['dir'] = filter_input( INPUT_POST, "dir", FILTER_SANITIZE_STRING) ? filter_input( INPUT_POST, "dir", FILTER_SANITIZE_STRING): '/';
 				if ( $data['view_id'] === false ) {
 					$e = new WP_Error();
 					$e->add('error', "view_idは数値で入力してください");
@@ -152,7 +156,7 @@ class LayoutOptimizer {
 					update_option( self::PLUGIN_DB_KEY, $data );
 					$this->fetch_theme();
 					$this->change_theme();
-					$completed_text = 'view_idの保存が完了しました。';
+					$completed_text = 'view_idと集計対象ディレクトリの保存が完了しました。';
 					// 保存が完了したら、WordPressの機構を使って、一度だけメッセージを表示する
 					set_transient( self::COMPLETE_CONFIG, [ $completed_text ], 5 );
 				}
