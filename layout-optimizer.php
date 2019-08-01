@@ -79,10 +79,10 @@ class LayoutOptimizer {
 			return false;
 		}
 		$http     = new WP_Http();
-		$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'http://layout-optimizer.herokuapp.com/api/v1/themes/';
+		$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
 		$query    = !empty($data['dir']) ? '?dir='.urlencode($data['dir']):'';
 		$response = $http->get(
-			$url . $data['view_id'] . $query,
+			$url . $data['view_id'],
 			[
 				'headers' => [
 					'uid'          => $data['uid'],
