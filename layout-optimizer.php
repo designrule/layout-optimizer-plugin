@@ -73,6 +73,20 @@ class LayoutOptimizer {
 	function is_api_login( $data ) {
 		return ! ( empty( $data['uid'] ) || empty( $data['client'] ) || empty( $data['expiry'] ) || empty( $data['access_token'] ) );
 	}
+	function build_query($data) {
+		$query = [];
+		if(!empty($data['dir'])){
+			$query['dir'] =  $data['dir'];
+		}
+		if(!empty($data['lang'])){
+			$query['lang'] =  $data['lang'];
+		}
+		$qstring = http_build_query($query);
+		if(!empty($data['dir'])) {
+			return "?". $qstring;
+		}
+		return "";
+	}
 	function fetch_theme() {
 		$data = get_option( self::PLUGIN_DB_KEY );
 		if ( ! $this->is_api_login( $data ) && ! empty( $data['view_id'] ) ) {
@@ -80,9 +94,9 @@ class LayoutOptimizer {
 		}
 		$http     = new WP_Http();
 		$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
-		$query    = !empty($data['dir']) ? '?dir='.urlencode($data['dir']):'';
+
 		$response = $http->get(
-			$url . $data['view_id'] . $query,
+			$url . $data['view_id'] . $this->build_query($data),
 			[
 				'headers' => [
 					'uid'          => $data['uid'],
@@ -148,6 +162,7 @@ class LayoutOptimizer {
 				$data            = get_option( self::PLUGIN_DB_KEY );
 				$data['view_id'] = ! empty( $_POST['view_id'] ) ? filter_input( INPUT_POST, "view_id", FILTER_VALIDATE_INT) : '';
 				$data['dir'] = filter_input( INPUT_POST, "dir", FILTER_SANITIZE_STRING) ? filter_input( INPUT_POST, "dir", FILTER_SANITIZE_STRING): '/';
+				$data['lang'] = filter_input( INPUT_POST, "lang", FILTER_SANITIZE_STRING) ? filter_input( INPUT_POST, "lang", FILTER_SANITIZE_STRING): 'ja';
 				if ( $data['view_id'] === false ) {
 					$e = new WP_Error();
 					$e->add('error', "view_idは数値で入力してください");

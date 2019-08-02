@@ -28,6 +28,10 @@
               <label for="dir">集計対象のディレクトリ:</label>
               <input type="text" name="dir" value="<?= esc_attr(!empty($data["dir"]) ? $data["dir"]: ""); ?>"/>
             </li>
+            <li>
+              <label for="lang">集計対象の言語:</label>
+              <input type="text" name="lang" value="<?= esc_attr(!empty($data["lang"]) ? $data["lang"]: ""); ?>"/>
+            </li>
 			</ul>
             <p><input type='submit' value='登録' class='view_id button button-primary button-large' /></p>
         </form>
