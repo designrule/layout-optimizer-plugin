@@ -82,7 +82,7 @@ class LayoutOptimizer {
 		$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
 		$query    = !empty($data['dir']) ? '?dir='.urlencode($data['dir']):'';
 		$response = $http->get(
-			$url . $data['view_id'],
+			$url . $data['view_id'] . $query,
 			[
 				'headers' => [
 					'uid'          => $data['uid'],
@@ -98,8 +98,8 @@ class LayoutOptimizer {
 			return new $response;
 		}
 		$res                      = json_decode( $response['body'], true );
-		$data['theme']            = $res['ja']['theme'];
-		$data['gini_coefficient'] = $res['ja']['gini_coefficient'];
+		$data['theme']            = $res['theme'];
+		$data['gini_coefficient'] = $res['gini_coefficient'];
 		$data['json']             = $res;
 		$data['last']             = time();
 		update_option( self::PLUGIN_DB_KEY, $data );
