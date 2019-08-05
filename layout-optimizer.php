@@ -73,16 +73,9 @@ class LayoutOptimizer {
 	function is_api_login( $data ) {
 		return ! ( empty( $data['uid'] ) || empty( $data['client'] ) || empty( $data['expiry'] ) || empty( $data['access_token'] ) );
 	}
-	function build_query($data) {
-		$query = [];
-		if(!empty($data['dir'])){
-			$query['dir'] =  $data['dir'];
-		}
-		if(!empty($data['lang'])){
-			$query['lang'] =  $data['lang'];
-		}
+	function build_query( $query ) {
 		$qstring = http_build_query($query);
-		if(!empty($qstring)) {
+		if ( !empty($qstring) ) {
 			return "?". $qstring;
 		}
 		return "";
@@ -94,9 +87,8 @@ class LayoutOptimizer {
 		}
 		$http     = new WP_Http();
 		$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
-
 		$response = $http->get(
-			$url . $data['view_id'] . $this->build_query($data),
+			$url . $data['view_id'] . $this->build_query($data["contents_group"][0]["query"]),
 			[
 				'headers' => [
 					'uid'          => $data['uid'],
@@ -109,7 +101,7 @@ class LayoutOptimizer {
 			]
 		);
 		if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-			return new $response;
+			return $response;
 		}
 		$res                      = json_decode( $response['body'], true );
 		$data['theme']            = $res['theme'];
@@ -161,8 +153,16 @@ class LayoutOptimizer {
 				// 保存処理
 				$data            = get_option( self::PLUGIN_DB_KEY );
 				$data['view_id'] = ! empty( $_POST['view_id'] ) ? filter_input( INPUT_POST, "view_id", FILTER_VALIDATE_INT) : '';
-				$data['dir'] = filter_input( INPUT_POST, "dir", FILTER_SANITIZE_STRING) ? filter_input( INPUT_POST, "dir", FILTER_SANITIZE_STRING): '/';
-				$data['lang'] = filter_input( INPUT_POST, "lang", FILTER_SANITIZE_STRING) ? filter_input( INPUT_POST, "lang", FILTER_SANITIZE_STRING): 'ja';
+				$optimize_page = filter_input( INPUT_POST, "optimize_page", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+				$dir = filter_input( INPUT_POST, "dir", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+				$lang = filter_input( INPUT_POST, "lang", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+				$data["contents_group"] = [];
+				for ( $i = 0 ; $i<10; $i++ ) {
+					$contents_group = ["optimize_page" => $optimize_page[$i],
+									   "query" => [ "dir" => $dir[$i],
+													"lang" => $lang[$i] ] ];
+					$data["contents_group"][] = $contents_group;
+				}
 				if ( $data['view_id'] === false ) {
 					$e = new WP_Error();
 					$e->add('error', "view_idは数値で入力してください");

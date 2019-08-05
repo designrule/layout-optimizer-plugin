@@ -24,14 +24,23 @@
               <label for="view_id">GoogleAnalyticsのview_id:</label>
               <input type="text" name="view_id" value="<?= esc_attr(!empty($data["view_id"]) ? $data["view_id"]: ""); ?>"/>
             </li>
+			<?php for ( $layout_optimizer_i = 0; $layout_optimizer_i < 10; $layout_optimizer_i++ ) { ?>
             <li>
+              <label for="optimize_page">最適化するページ:</label>
+              <input type="text" name="optimize_page[]" value="<?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["optimize_page"]) ? $data["contents_group"][$layout_optimizer_i]["optimize_page"]: ""); ?>"/>
               <label for="dir">集計対象のディレクトリ:</label>
-              <input type="text" name="dir" value="<?= esc_attr(!empty($data["dir"]) ? $data["dir"]: ""); ?>"/>
-            </li>
-            <li>
+              <input type="text" name="dir[]" value="<?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["query"]["dir"]) ? $data["contents_group"][$layout_optimizer_i]["query"]["dir"]: ""); ?>"/>
               <label for="lang">集計対象の言語:</label>
-              <input type="text" name="lang" value="<?= esc_attr(!empty($data["lang"]) ? $data["lang"]: ""); ?>"/>
+			  <select name="lang[]">
+				<option value="ja" <?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["query"]["lang"]) && $data["contents_group"][$layout_optimizer_i]["query"]["lang"] == "ja" ? "selected": ""); ?>>日本語</option>
+				<option value="en" <?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["query"]["lang"]) && $data["contents_group"][$layout_optimizer_i]["query"]["lang"] == "en" ? "selected": ""); ?>>英語</option>
+				<option value="ko" <?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["query"]["lang"]) && $data["contents_group"][$layout_optimizer_i]["query"]["lang"] == "ko" ? "selected": ""); ?>>韓国語</option>
+				<option value="zh-tw" <?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["query"]["lang"]) && $data["contents_group"][$layout_optimizer_i]["query"]["lang"] == "zh-tw" ? "selected": ""); ?>>中国語(繁体字)</option>
+				<option value="zh-cn" <?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["query"]["lang"]) && $data["contents_group"][$layout_optimizer_i]["query"]["lang"] == "zh-cn" ? "selected": ""); ?>>中国語(簡体字)</option>
+				<option value="fr" <?= esc_attr(!empty($data["contents_group"][$layout_optimizer_i]["query"]["lang"]) && $data["contents_group"][$layout_optimizer_i]["query"]["lang"] == "fr" ? "selected": ""); ?>>フランス語</option>
+			  </select>
             </li>
+			<?php } ?>
 			</ul>
             <p><input type='submit' value='登録' class='view_id button button-primary button-large' /></p>
         </form>
