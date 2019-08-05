@@ -82,7 +82,7 @@ class LayoutOptimizer {
 			$query['lang'] =  $data['lang'];
 		}
 		$qstring = http_build_query($query);
-		if(!empty($data['dir'])) {
+		if(!empty($qstring)) {
 			return "?". $qstring;
 		}
 		return "";
