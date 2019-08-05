@@ -46,7 +46,7 @@
         </form>
             <?php if ( !empty($data["contents_group"]) ) { ?>
             <h2>APIの取得結果</h2>
-            	<?php foreach($data["contents_group"] as $layout_optimizer_content_group) { ?>
+            	<?php foreach ( $data["contents_group"] as $layout_optimizer_content_group ) { ?>
             		<p>theme: <?= $layout_optimizer_content_group["theme"]; ?></p>
             		<p>gini: <?= $layout_optimizer_content_group["gini_coefficient"]; ?></p>
             		<p>json: <?= print_r($layout_optimizer_content_group["json"]); ?></p>

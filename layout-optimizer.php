@@ -57,8 +57,8 @@ class LayoutOptimizer {
 	}
 	function change_theme() {
 		$data = get_option( self::PLUGIN_DB_KEY );
-		foreach($data["contents_group"] as $contents_group) {
-			if ( ! empty( $contents_group['theme'] ) || empty( $contents_group['optimize_page'] )) {
+		foreach ( $data["contents_group"] as $contents_group ) {
+			if ( ! empty( $contents_group['theme'] ) || empty( $contents_group['optimize_page'] ) ) {
 				if ( 'A' === $data['theme'] ) {
 					update_post_meta(2, "_wp_page_template", "");
 					switch_theme( 'twentyseventeen' );
@@ -87,7 +87,7 @@ class LayoutOptimizer {
 		if ( ! $this->is_api_login( $data ) && ! empty( $data['view_id'] ) ) {
 			return false;
 		}
-		for($i = 0; $i < count($data["contents_group"]); $i++) {
+		for ( $i = 0; $i < count($data["contents_group"]); $i++ ) {
 			$http     = new WP_Http();
 			$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
 			$response = $http->get(
