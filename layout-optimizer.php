@@ -57,16 +57,18 @@ class LayoutOptimizer {
 	}
 	function change_theme() {
 		$data = get_option( self::PLUGIN_DB_KEY );
-		if ( ! empty( $data['theme'] ) ) {
-			if ( 'A' === $data['theme'] ) {
-				//update_post_meta(2, "_wp_page_template", "");
-				switch_theme( 'twentyseventeen' );
-			} elseif ( 'B' === $data['theme'] ) {
-				//update_post_meta(2, "_wp_page_template", "page-1.php");
-				//update_post_meta(2, "_wp_page_template", "");
-				switch_theme( 'twentysixteen' );
-			} else {
-				switch_theme( 'twentynineteen' );
+		foreach($data["contents_group"] as $contents_group) {
+			if ( ! empty( $contents_group['theme'] ) || empty( $contents_group['optimize_page'] )) {
+				if ( 'A' === $data['theme'] ) {
+					update_post_meta(2, "_wp_page_template", "");
+					switch_theme( 'twentyseventeen' );
+				} elseif ( 'B' === $data['theme'] ) {
+					update_post_meta(2, "_wp_page_template", "page-1.php");
+					//update_post_meta(2, "_wp_page_template", "");
+					switch_theme( 'twentysixteen' );
+				} else {
+					switch_theme( 'twentynineteen' );
+				}
 			}
 		}
 	}
@@ -85,29 +87,31 @@ class LayoutOptimizer {
 		if ( ! $this->is_api_login( $data ) && ! empty( $data['view_id'] ) ) {
 			return false;
 		}
-		$http     = new WP_Http();
-		$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
-		$response = $http->get(
-			$url . $data['view_id'] . $this->build_query($data["contents_group"][0]["query"]),
-			[
-				'headers' => [
-					'uid'          => $data['uid'],
-					'client'       => $data['client'],
-					'expiry'       => $data['expiry'],
-					'access-token' => $data['access_token'],
-					'Content-Type' => 'application/json',
-				],
-				'timeout' => 10,
-			]
-		);
-		if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
-			return $response;
+		for($i = 0; $i < count($data["contents_group"]); $i++) {
+			$http     = new WP_Http();
+			$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
+			$response = $http->get(
+				$url . $data['view_id'] . $this->build_query($data["contents_group"][$i]["query"]),
+				[
+					'headers' => [
+						'uid'          => $data['uid'],
+						'client'       => $data['client'],
+						'expiry'       => $data['expiry'],
+						'access-token' => $data['access_token'],
+						'Content-Type' => 'application/json',
+					],
+					'timeout' => 10,
+				]
+			);
+			if ( is_wp_error( $response ) || 200 !== $response['response']['code'] ) {
+				return $response;
+			}
+			$res                      = json_decode( $response['body'], true );
+			$data["contents_group"][$i]["theme"] = $res['theme'];
+			$data["contents_group"][$i]['gini_coefficient'] = $res['gini_coefficient'];
+			$data["contents_group"][$i]['json']             = $res;
+			$data["contents_group"][$i]['last']             = time();
 		}
-		$res                      = json_decode( $response['body'], true );
-		$data['theme']            = $res['theme'];
-		$data['gini_coefficient'] = $res['gini_coefficient'];
-		$data['json']             = $res;
-		$data['last']             = time();
 		update_option( self::PLUGIN_DB_KEY, $data );
 	}
 

@@ -44,14 +44,16 @@
 			</ul>
             <p><input type='submit' value='登録' class='view_id button button-primary button-large' /></p>
         </form>
-            <?php if ( !empty($data["theme"]) ) { ?>
+            <?php if ( !empty($data["contents_group"]) ) { ?>
             <h2>APIの取得結果</h2>
-            <p>theme: <?= $data["theme"]; ?></p>
-            <p>gini: <?= $data["gini_coefficient"]; ?></p>
-            <p>json: <?= print_r($data["json"]); ?></p>
-            <p>updated at: <?= $data["last"]; ?></p>
-		    <p><?= wp_next_scheduled('my_hourly_event'); ?></p>
-		    <p><?= wp_get_theme(); ?></p>
+            	<?php foreach($data["contents_group"] as $layout_optimizer_content_group) { ?>
+            		<p>theme: <?= $layout_optimizer_content_group["theme"]; ?></p>
+            		<p>gini: <?= $layout_optimizer_content_group["gini_coefficient"]; ?></p>
+            		<p>json: <?= print_r($layout_optimizer_content_group["json"]); ?></p>
+            		<p>updated at: <?= $layout_optimizer_content_group["last"]; ?></p>
+		    		<p><?= wp_next_scheduled('my_hourly_event'); ?></p>
+		    		<p><?= wp_get_theme(); ?></p>
+    			<?php } ?>
     		<?php } ?>
         <?php } ?>
 </div>
