@@ -59,15 +59,17 @@ class LayoutOptimizer {
 		$data = get_option( self::PLUGIN_DB_KEY );
 		foreach ( $data["contents_group"] as $contents_group ) {
 			if ( ! empty( $contents_group['theme'] ) || empty( $contents_group['optimize_page'] ) ) {
-				if ( 'A' === $data['theme'] ) {
-					update_post_meta(2, "_wp_page_template", "");
-					switch_theme( 'twentyseventeen' );
-				} elseif ( 'B' === $data['theme'] ) {
-					update_post_meta(2, "_wp_page_template", "page-1.php");
-					//update_post_meta(2, "_wp_page_template", "");
+				$post_id = url_to_postid($contents_group['optimize_page']);
+				if ( $post_id == 0 ) {
+					continue;
+				}
+				if ( 'A' === $contents_group['theme'] ) {
 					switch_theme( 'twentysixteen' );
+					update_post_meta($post_id, "_wp_page_template", "page-a.php");
+				} elseif ( 'B' === $contents_group['theme'] ) {
+					update_post_meta($post_id, "_wp_page_template", "page-b.php");
 				} else {
-					switch_theme( 'twentynineteen' );
+					update_post_meta($post_id, "_wp_page_template", "page-c.php");
 				}
 			}
 		}

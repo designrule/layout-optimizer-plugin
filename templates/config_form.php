@@ -1,5 +1,4 @@
 <div class="wrap">
-	 <?php var_dump(get_post_meta("2", "", true)); ?>
 	 <h1>Google Analyticsの設定</h1>
         <?php if ( $this->is_api_login($data) && !empty($data['email']) ) { ?>
         <p><?php echo esc_html($data['email']); ?>でログイン中 <input type='button' value='連携解除' class='signout button button-primary button-large'></p>
