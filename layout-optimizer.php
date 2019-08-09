@@ -20,6 +20,7 @@ class LayoutOptimizer {
 	const CONFIG_MENU_SLUG = self::PLUGIN_ID . '-config';
 	const COMPLETE_CONFIG  = self::PLUGIN_ID . '-complete';
 	const ERROR_MESSAGE  = self::PLUGIN_ID . '-alert';
+	const CONTENTS_GROUP_COUNT = 10;
 
 	static function init() {
 		return new self();
@@ -161,12 +162,10 @@ class LayoutOptimizer {
 				$data['view_id'] = ! empty( $_POST['view_id'] ) ? filter_input( INPUT_POST, "view_id", FILTER_VALIDATE_INT) : '';
 				$optimize_page = filter_input( INPUT_POST, "optimize_page", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 				$dir = filter_input( INPUT_POST, "dir", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-				$lang = filter_input( INPUT_POST, "lang", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 				$data["contents_group"] = [];
-				for ( $i = 0 ; $i<10; $i++ ) {
+				for ( $i = 0 ; $i<self::CONTENTS_GROUP_COUNT; $i++ ) {
 					$contents_group = ["optimize_page" => $optimize_page[$i],
-									   "query" => [ "dir" => $dir[$i],
-													"lang" => $lang[$i] ] ];
+									   "query" => [ "dir" => $dir[$i] ] ];
 					$data["contents_group"][] = $contents_group;
 				}
 				if ( $data['view_id'] === false ) {
