@@ -3,7 +3,7 @@ class LayoutOptimizerOption {
 
 	public $options = [];
 
-	public function __construct($options) {
+	public function __construct( $options ) {
 		$this->options = $options;
 	}
 	/**
