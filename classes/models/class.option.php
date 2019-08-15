@@ -2,19 +2,11 @@
 class LayoutOptimizerOption {
 
 	public $options = [];
+	protected $http;
 
-	public function __construct( $options ) {
+	public function __construct( $options, $http = null ) {
 		$this->options = $options;
-	}
-	/**
-	 * Set options
-	 *
-	 * @param array $values
-	 * @return void
-	 */
-	public function set_options( array $options ) {
-		$this->options = $options;
-		return $this;
+		$this->http = $http ? $http : new WP_Http();
 	}
 	/**
 	 * Update with retained data
@@ -44,13 +36,12 @@ class LayoutOptimizerOption {
 		return "";
 	}
 	function fetch_theme() {
-		if ( ! $this->is_api_login( $this->options ) && ! empty( $this->options['view_id'] ) ) {
+		if ( ! $this->is_api_login() && ! empty( $this->options['view_id'] ) ) {
 			return false;
 		}
 		for ( $i = 0; $i < count($this->options["contents_group"]); $i++ ) {
-			$http     = new WP_Http();
 			$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
-			$response = $http->get(
+			$response = $this->http->get(
 				$url . $this->options['view_id'] . $this->build_query($this->options["contents_group"][$i]["query"]),
 				[
 					'headers' => [
@@ -82,7 +73,6 @@ class LayoutOptimizerOption {
 					continue;
 				}
 				if ( 'A' === $contents_group['theme'] ) {
-					switch_theme( 'twentysixteen' );
 					update_post_meta($post_id, "_wp_page_template", "page-a.php");
 				} elseif ( 'B' === $contents_group['theme'] ) {
 					update_post_meta($post_id, "_wp_page_template", "page-b.php");
