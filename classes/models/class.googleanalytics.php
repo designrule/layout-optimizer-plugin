@@ -6,12 +6,12 @@ class LayoutOptimizerGoogleAnalytics {
 	protected $pv;
 	protected $optimize_page;
 
-	public function __construct( $id, $post_id, $path, $pv, $optimize_page ) {
+	public function __construct( $id, $post_id, $path, $pv, $optimize_page_id ) {
 		$this->id = $id;
 		$this->path = $path;
 		$this->post_id = $post_id;
 		$this->pv = $pv;
-		$this->optimize_page = $optimize_page;
+		$this->optimize_page_id = $optimize_page_id;
 	}
 	public static function init() {
 		global $wpdb;
@@ -19,9 +19,6 @@ class LayoutOptimizerGoogleAnalytics {
 		$charset_collate = $wpdb->get_charset_collate();
 		$data = LayoutOptimizerOption::find();
 		if ( !isset($data->options["db_version"]) || $data->options["db_version"] != LayoutOptimizerConfig::PLUGIN_DB_VERSION ) {
-			var_dump($data->options["db_version"]);
-			var_dump(LayoutOptimizerConfig::PLUGIN_DB_VERSION);
-
 			$sql = "CREATE TABLE $table_name (
     id mediumint(9) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     path text NOT NULL,
@@ -45,13 +42,13 @@ class LayoutOptimizerGoogleAnalytics {
 		$wpdb->query($sql);
 	}
 
-	public static function import($pages) {
+	public static function import( $pages ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . "googleanalytics";
 		$wpdb->query("TRUNCATE TABLE $table_name");
 		$arr = [];
 		$place_holders = [];
-		foreach($pages as $page) {
+		foreach ( $pages as $page ) {
 			$arr []= $page["path"];
 			$arr []= $page["post_id"];
 			$arr []= $page["pv"];

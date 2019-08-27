@@ -66,7 +66,7 @@ class LayoutOptimizerOption {
 				["path" => "/2019/08/08/hello-world-2/", "pv" => 12, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
 				["path" => "/contents1/", "pv" => 11, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]]
 			];
-			array_walk($res["pages"], function(&$arr) {
+			array_walk($res["pages"], function( &$arr ) {
 				$arr["post_id"] = url_to_postid($arr["path"]);
 				$arr["optimize_page_id"] = url_to_postid($arr["optimize_page"]);
 			});
