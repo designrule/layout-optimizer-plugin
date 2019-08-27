@@ -34,6 +34,7 @@ class LayoutOptimizer {
 	 */
 	public function _load_initialize_files() {
 		require_once plugin_dir_path( __FILE__ ) . 'classes/config.php';
+		require_once plugin_dir_path( __FILE__ ) . 'classes/functions.php';
 		$plugin_dir_path = plugin_dir_path( __FILE__ );
 		$includes        = array(
 			'/classes/abstract',
@@ -53,10 +54,15 @@ class LayoutOptimizer {
 		if ( ! wp_next_scheduled( 'my_hourly_event' ) ) {
 			wp_schedule_single_event( time() + ( 60 * 60 ), 'my_hourly_event' );
 		}
+		LayoutOptimizerGoogleAnalytics::init();
 	}
 
 	static function my_deactivation() {
-		delete_option( self::PLUGIN_DB_KEY );
+		LayoutOptimizerOption::delete();
+		LayoutOptimizerGoogleAnalytics::delete();
+		remove_filter('posts_join', 'layout_optimizer_join' );
+		remove_filter('posts_where', 'layout_optimizer_where' );
+		remove_filter( 'posts_orderby', 'layout_optimizer_orderby' );
 		wp_clear_scheduled_hook( 'my_hourly_event' );
 	}
 
