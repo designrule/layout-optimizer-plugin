@@ -60,7 +60,7 @@ class LayoutOptimizerOption {
 			}
 			$res                      = json_decode( $response['body'], true );
 			//開発用テストデータ
-			if( "development" == getenv( 'LAYOUT_OPTIMIZER_ENV' ) ) {
+			if ( "development" == getenv( 'LAYOUT_OPTIMIZER_ENV' ) ) {
 				$res["pages"] = [
 					["path" => "/mt-yoshino/", "pv" => 15, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
 					["path" => "/kinpusen-ji/", "pv" => 14, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
