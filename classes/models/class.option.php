@@ -59,13 +59,16 @@ class LayoutOptimizerOption {
 				return $response;
 			}
 			$res                      = json_decode( $response['body'], true );
-			$res["pages"] = [
-				["path" => "/mt-yoshino/", "pv" => 15, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
-				["path" => "/kinpusen-ji/", "pv" => 14, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
-				["path" => "/tanzan-jinja/", "pv" => 13, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
-				["path" => "/2019/08/08/hello-world-2/", "pv" => 12, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
-				["path" => "/contents1/", "pv" => 11, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]]
-			];
+			//開発用テストデータ
+			if( "development" == getenv( 'LAYOUT_OPTIMIZER_ENV' ) ) {
+				$res["pages"] = [
+					["path" => "/mt-yoshino/", "pv" => 15, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/kinpusen-ji/", "pv" => 14, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/tanzan-jinja/", "pv" => 13, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/2019/08/08/hello-world-2/", "pv" => 12, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/contents1/", "pv" => 11, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]]
+				];
+			}
 			array_walk($res["pages"], function( &$arr ) {
 				$arr["post_id"] = url_to_postid($arr["path"]);
 				$arr["optimize_page_id"] = url_to_postid($arr["optimize_page"]);
