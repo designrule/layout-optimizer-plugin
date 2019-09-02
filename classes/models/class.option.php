@@ -24,7 +24,7 @@ class LayoutOptimizerOption {
 		return new LayoutOptimizerOption( $options );
 	}
 
-	public function delete() {
+	public static function delete() {
 		return delete_option( LayoutOptimizerConfig::PLUGIN_DB_KEY );
 	}
 
@@ -39,6 +39,7 @@ class LayoutOptimizerOption {
 		if ( ! $this->is_api_login() && ! empty( $this->options['view_id'] ) ) {
 			return false;
 		}
+		$pv_list = [];
 		for ( $i = 0; $i < count($this->options["contents_group"]); $i++ ) {
 			$url      = getenv( 'LAYOUT_OPTIMIZER_API_URL' ) ? getenv( 'LAYOUT_OPTIMIZER_API_URL' ) : 'https://layout-optimizer.herokuapp.com/api/v1/themes/';
 			$response = $this->http->get(
@@ -58,11 +59,27 @@ class LayoutOptimizerOption {
 				return $response;
 			}
 			$res                      = json_decode( $response['body'], true );
+			//開発用テストデータ
+			if ( "development" == getenv( 'LAYOUT_OPTIMIZER_ENV' ) ) {
+				$res["pages"] = [
+					["path" => "/mt-yoshino/", "pv" => 15, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/kinpusen-ji/", "pv" => 14, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/tanzan-jinja/", "pv" => 13, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/2019/08/08/hello-world-2/", "pv" => 12, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]],
+					["path" => "/contents1/", "pv" => 11, "optimize_page" => $this->options["contents_group"][$i]["optimize_page"]]
+				];
+			}
+			array_walk($res["pages"], function( &$arr ) {
+				$arr["post_id"] = url_to_postid($arr["path"]);
+				$arr["optimize_page_id"] = url_to_postid($arr["optimize_page"]);
+			});
+			$pv_list = array_merge($pv_list, $res["pages"]);
 			$this->options["contents_group"][$i]["theme"] = $res['theme'];
 			$this->options["contents_group"][$i]['gini_coefficient'] = $res['gini_coefficient'];
 			$this->options["contents_group"][$i]['json']             = $res;
 			$this->options["contents_group"][$i]['last']             = time();
 		}
+		LayoutOptimizerGoogleAnalytics::import($pv_list);
 		$this->save();
 	}
 	function change_theme() {

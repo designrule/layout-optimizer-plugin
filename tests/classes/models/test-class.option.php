@@ -87,8 +87,8 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 				"theme" => "A",
 				"gini_coefficient" => "0.77777",
 				"pages" => [
-					["page" => "/hoge", "pv" => 100],
-					["page" => "/fuga", "pv" => 1],
+					["path" => "/hoge", "pv" => 100, "optimize_page" => "/sample-page"],
+					["path" => "/fuga", "pv" => 1, "optimize_page" => "/sample-page"],
 				]
 			])
 		]);

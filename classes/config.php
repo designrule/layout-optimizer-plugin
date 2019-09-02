@@ -6,6 +6,7 @@ class LayoutOptimizerConfig {
 	const CREDENTIAL_VIEW_ACTION = self::PLUGIN_ID . '-view-nonce-action';
 	const CREDENTIAL_VIEW_NAME   = self::PLUGIN_ID . '-view-nonce-key';
 	const PLUGIN_DB_KEY          = self::PLUGIN_ID . '-data';
+	const PLUGIN_DB_VERSION      = 201908271240;
 	// config画面のslug
 	const CONFIG_MENU_SLUG = self::PLUGIN_ID . '-config';
 	const COMPLETE_CONFIG  = self::PLUGIN_ID . '-complete';

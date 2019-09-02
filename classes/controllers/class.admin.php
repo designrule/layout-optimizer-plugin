@@ -29,15 +29,14 @@ class LayoutOptimizerAdminController {
 		// nonceで設定したcredentialのチェック
 		if ( isset( $_POST[ LayoutOptimizerConfig::CREDENTIAL_NAME ] ) && $_POST[ LayoutOptimizerConfig::CREDENTIAL_NAME ] ) {
 			if ( check_admin_referer( LayoutOptimizerConfig::CREDENTIAL_ACTION, LayoutOptimizerConfig::CREDENTIAL_NAME ) ) {
+				$data = LayoutOptimizerOption::find();
 				// 保存処理
-				$data = [
-					'email'        => ! empty( $_POST['email'] ) ? $_POST['email'] : '',
-					'uid'          => ! empty( $_POST['uid'] ) ? $_POST['uid'] : '',
-					'client'       => ! empty( $_POST['client'] ) ? $_POST['client'] : '',
-					'expiry'       => ! empty( $_POST['expiry'] ) ? $_POST['expiry'] : '',
-					'access_token' => ! empty( $_POST['access_token'] ) ? $_POST['access_token'] : '',
-				];
-				update_option( LayoutOptimizerConfig::PLUGIN_DB_KEY, $data );
+				$data->options['email'] = ! empty( $_POST['email'] ) ? $_POST['email'] : '';
+				$data->options['uid']          = ! empty( $_POST['uid'] ) ? $_POST['uid'] : '';
+				$data->options['client']       = ! empty( $_POST['client'] ) ? $_POST['client'] : '';
+				$data->options['expiry']       = ! empty( $_POST['expiry'] ) ? $_POST['expiry'] : '';
+				$data->options['access_token'] = ! empty( $_POST['access_token'] ) ? $_POST['access_token'] : '';
+				$data->save();
 				$completed_text = '連携が完了しました。';
 
 				// 保存が完了したら、WordPressの機構を使って、一度だけメッセージを表示する
@@ -83,7 +82,7 @@ class LayoutOptimizerAdminController {
 	}
 
 	function show_config_form() {
-		wp_enqueue_script( 'layout-optimizer', plugins_url( '/dist/main.js', __FILE__ ), array(), date( 'U' ) );
+		wp_enqueue_script( 'layout-optimizer', plugins_url( 'layout-optimizer/dist/main.js'), [], date( 'U' ) );
 		$data = LayoutOptimizerOption::find();
 		include __DIR__ . '/../../templates/config_form.php';
 	}
