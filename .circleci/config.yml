@@ -69,7 +69,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
-      - add_ssh_keys
+      - add_ssh_keys:
+          fingerprints:
+            - "fd:01:52:e1:3a:52:b4:0a:c9:fe:b0:6a:fb:85:4b:05"
       - run:
           name: "Publish Release on GitHub"
           command: |
