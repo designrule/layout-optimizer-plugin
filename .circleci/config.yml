@@ -82,8 +82,8 @@ jobs:
           name: エラー報告
           command: |
             # https://qiita.com/yo1000/items/3b81bfcbf9240c688535
-            echo "GIT_RESULT_1 [${GITT_RESULT_1:-0}]"
-            echo "GIT_RESULT_2 [${GITT_RESULT_2:-0}]"
+            echo "GIT_RESULT_1 [${GTT_RESULT_1:-0}]"
+            echo "GIT_RESULT_2 [${GTT_RESULT_2:-0}]"
             echo "GIT_RESULT_3 [${GIT_RESULT_3:-0}]"
             
           
