@@ -51,11 +51,6 @@ job-references:
             bash bin/install-wp-tests.sh wordpress_test root '' 127.0.0.1 latest
             vendor/bin/phpunit
             WP_MULTISITE=1 vendor/bin/phpunit
-            npx webpack --mode production
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 jobs:
   php72-build:
     <<: *php_job
@@ -65,17 +60,17 @@ jobs:
 
   publish:
     docker:
-      - image: cibuilds/github:0.10
+      - image: circleci/php:7.2
     steps:
-      - attach_workspace:
-          at: ./
-      - add_ssh_keys:
-          fingerprints:
-            - "fd:01:52:e1:3a:52:b4:0a:c9:fe:b0:6a:fb:85:4b:05"
+      - checkout
+      - add_ssh_keys
+      - run: *install_dependencies
       - run:
           name: "Publish Release on GitHub"
           command: |
             VERSION=$(awk '/Version:/ {print $2}' layout-optimizer.php)
+            npm install
+            npx webpack --mode production
             git config --global merge.ours.driver true
             git config user.name $GITHUB_NAME
             git config user.email $GITHUB_EMAIL
