@@ -2,10 +2,10 @@ workflows:
   version: 2
   main:
     jobs:
-      - php72-build
+      - php73-build
       - publish:
           requires:
-            - php72-build
+            - php73-build
           filters:
             branches:
               only:
@@ -52,7 +52,7 @@ job-references:
             vendor/bin/phpunit
             WP_MULTISITE=1 vendor/bin/phpunit
 jobs:
-  php72-build:
+  php73-build:
     <<: *php_job
     docker:
       - image: circleci/php:7.3
@@ -65,16 +65,26 @@ jobs:
       - checkout
       - add_ssh_keys
       - run: *install_dependencies
+      - run: npm install
+      - run:
+          name: webpack
+          command: npx webpack --mode production
       - run:
           name: "Publish Release on GitHub"
           command: |
             VERSION=$(awk '/Version:/ {print $2}' layout-optimizer.php)
-            npm install
-            npx webpack --mode production
-            git config --global merge.ours.driver true
             git config user.name $GITHUB_NAME
             git config user.email $GITHUB_EMAIL
-            git add -A
-            git commit -m "[ci skip] build ${VERSION} ${CIRCLE_SHA1}"
-            git push $(git config --get remote.origin.url) $CIRCLE_BRANCH
+            git add -A || echo "export GIT_RESULT_1=${?}" >> $BASH_ENV
+            git commit -m "[ci skip] build ${VERSION} ${CIRCLE_SHA1}" || echo "export GIT_RESULT_2=${?}" >> $BASH_ENV
+            git push $(git config --get remote.origin.url) $CIRCLE_BRANCH || echo "export GIT_RESULT_3=${?}" >> $BASH_ENV
+      - run:
+          name: エラー報告
+          command: |
+            # https://qiita.com/yo1000/items/3b81bfcbf9240c688535
+            echo "TEST_RESULT_1 [${GITT_RESULT_1:-0}]"
+            echo "TEST_RESULT_2 [${GITT_RESULT_2:-0}]"
+            echo "TEST_RESULT_2 [${GIT_RESULT_3:-0}]"
+            
+          
 
