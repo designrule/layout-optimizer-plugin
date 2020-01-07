@@ -2,7 +2,7 @@ workflows:
   version: 2
   main:
     jobs:
-      - php72-build:
+      - php72-build
       - publish:
           requires:
             - php72-build
