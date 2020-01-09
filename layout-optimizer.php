@@ -3,7 +3,7 @@
 	Plugin Name: LayoutOptimizer
 	Plugin URI:
 	Description: レイアウトを最適化するプラグイン
-	Version: 0.0.2
+	Version: 0.0.3
 	Author: designrule
 	Author URI: https://github.com/designrule/layout-optimizer-plugin
 	License: UNLICENSED
