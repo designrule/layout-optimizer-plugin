@@ -41,4 +41,4 @@ MySQLのrootパスワードは.envファイルで設定したMYSQL_ROOT_PASSWORD
 
 - layout-optimizer.phpのVersionコメントを修正してマージ
 - [Releases · designrule/layout-optimizer-plugin](https://github.com/designrule/layout-optimizer-plugin/releases)からタグを作成
-- CircleCI経由で、zipファイルがgithub releaseに自動アップロードされる。
+
