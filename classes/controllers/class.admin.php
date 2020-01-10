@@ -82,7 +82,7 @@ class LayoutOptimizerAdminController {
 	}
 
 	function show_config_form() {
-		wp_enqueue_script( 'layout-optimizer', plugins_url( 'layout-optimizer/dist/main.js'), [], date( 'U' ) );
+		wp_enqueue_script( 'layout-optimizer', plugins_url( 'layout-optimizer-plugin/dist/main.js'), [], date( 'U' ) );
 		$data = LayoutOptimizerOption::find();
 		include __DIR__ . '/../../templates/config_form.php';
 	}
