@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - .:/var/www/html/wp-content/plugins/layout-optimizer
+      - .:/var/www/html/wp-content/plugins/layout-optimizer-plugin
       - for-testing:/tmp
     depends_on:
       - db
