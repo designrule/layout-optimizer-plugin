@@ -87,8 +87,8 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 				"theme" => "A",
 				"gini_coefficient" => "0.77777",
 				"pages" => [
-					["path" => "/hoge", "pv" => 100, "optimize_page" => "/sample-page"],
-					["path" => "/fuga", "pv" => 1, "optimize_page" => "/sample-page"],
+					["path" => "/hoge", "pv" => 100],
+					["path" => "/fuga", "pv" => 1],
 				]
 			])
 		]);
@@ -100,10 +100,12 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 										   "access_token" => "token",
 										   "contents_group" => [
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ],
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ]
 										   ]
 		], $stub);
@@ -120,10 +122,12 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 		$data = new LayoutOptimizerOption(["view_id" => 1234,
 										   "contents_group" => [
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ],
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ]
 										   ]
 		], $stub);
@@ -138,10 +142,12 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 		$data = new LayoutOptimizerOption(["view_id" => 1234,
 										   "contents_group" => [
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ],
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ]
 										   ]
 		], $stub);
@@ -174,10 +180,12 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 										   "access_token" => "token",
 										   "contents_group" => [
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ],
 											   [
-												   "query" =>  ["dir" => "/"]
+												   "query" =>  ["dir" => "/"],
+												   "optimize_page" => "/sample-page"
 											   ]
 										   ]
 		], $stub);
