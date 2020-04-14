@@ -23,7 +23,7 @@ class LayoutOptimizerGoogleAnalytics {
     id mediumint(9) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     path text NOT NULL,
     post_id mediumint(9) NOT NULL,
-    pv text NOT NULL,
+    pv mediumint(9) NOT NULL,
     optimize_page_id mediumint(9) NOT NULL,
     KEY post_id_index(post_id)
   ) $charset_collate;";
