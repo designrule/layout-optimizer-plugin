@@ -198,7 +198,8 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 	public function url_to_postidはURLからpostidが取得できれば返す() {
 		$data = new LayoutOptimizerOption([]);
 		$this->assertEquals(12345, $data->url_to_postid("/sample/12345"));
-		$this->assertEquals(12345, $data->url_to_postid("/page_id=12345"));
+		$this->assertEquals(12345, $data->url_to_postid("/?page_id=12345"));
+		$this->assertEquals(12345, $data->url_to_postid("/?p=12345"));
 	}
 
 	public function url_to_postidはURLからpostidが取得できれば0を返す() {
