@@ -71,7 +71,7 @@ class LayoutOptimizerOption {
 			}
 			for ( $j = 0; $j < count($res["pages"]); $j++ ) {
 				$res["pages"][$j]["post_id"] = $this->url_to_postid($res["pages"][$j]["path"]);
-				if ( isset($this->options["contents_group"][$i]["optimize_page"]) ) {
+				if ( isset($this->options["contents_group"][$i]["optimize_page_id"]) ) {
 					$res["pages"][$j]["optimize_page_id"] = $this->options["contents_group"][$i]["optimize_page_id"];
 				}else {
 					$res["pages"][$j]["optimize_page_id"] = $this->url_to_postid($this->options["contents_group"][$i]["optimize_page"]);
