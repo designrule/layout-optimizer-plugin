@@ -102,7 +102,7 @@ class LayoutOptimizerOption {
 	function is_api_login() {
 		return ! ( empty( $this->options['uid'] ) || empty( $this->options['client'] ) || empty( $this->options['expiry'] ) || empty( $this->options['access_token'] ) );
 	}
-	function url_to_postid($url) {
+	function url_to_postid( $url ) {
 		// First, check to see if there is a 'p=N' or 'page_id=N' to match against.
 		if ( preg_match( '#[?&](p|page_id|attachment_id)=(\d+)#', $url, $values ) ) {
 			$id = absint( $values[2] );
@@ -111,7 +111,7 @@ class LayoutOptimizerOption {
 			}
 		}
 		$parsed = parse_url($url);
-		if($parsed == false) {
+		if ( $parsed == false ) {
 			return 0;
 		}
 		if ( preg_match( '#(\d+)$#', $parsed["path"], $values ) ) {
