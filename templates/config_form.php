@@ -25,6 +25,8 @@
             </li>
 			<?php for ( $layout_optimizer_i = 0; $layout_optimizer_i < LayoutOptimizerConfig::CONTENTS_GROUP_COUNT; $layout_optimizer_i++ ) { ?>
             <li>
+              <label for="optimize_page">最適化するページID:</label>
+              <input type="text" name="optimize_page_id[]" value="<?= esc_attr(!empty($data->options["contents_group"][$layout_optimizer_i]["optimize_page_id"]) ? $data->options["contents_group"][$layout_optimizer_i]["optimize_page_id"]: ""); ?>"/>
               <label for="optimize_page">最適化するページ:</label>
               <input type="text" name="optimize_page[]" value="<?= esc_attr(!empty($data->options["contents_group"][$layout_optimizer_i]["optimize_page"]) ? $data->options["contents_group"][$layout_optimizer_i]["optimize_page"]: ""); ?>"/>
               <label for="dir">集計対象のディレクトリ:</label>
