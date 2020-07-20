@@ -4,7 +4,7 @@ class LayoutOptimizerGoogleAnalytics {
 	protected $post_id;
 	protected $path;
 	protected $pv;
-	protected $optimize_page;
+	protected $optimize_page_id;
 
 	public function __construct( $id, $post_id, $path, $pv, $optimize_page_id ) {
 		$this->id = $id;

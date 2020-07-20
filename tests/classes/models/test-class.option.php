@@ -55,15 +55,15 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 			"contents_group" => [
 				[
 					"theme" => "A",
-					"optimize_page" => get_permalink($post_ids[0]),
+					"optimize_page_id" => $post_ids[0],
 				],
 				[
 					"theme" => "B",
-					"optimize_page" => get_permalink($post_ids[1]),
+					"optimize_page_id" => $post_ids[1],
 				],
 				[
 					"theme" => "C",
-					"optimize_page" => get_permalink($post_ids[2]),
+					"optimize_page_id" => $post_ids[2],
 				]
 			]
 		];
@@ -101,11 +101,11 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 										   "contents_group" => [
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page_id" => 2
 											   ],
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page_id" => 2
 											   ]
 										   ]
 		], $stub);
@@ -123,11 +123,11 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 										   "contents_group" => [
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page_id" => 2
 											   ],
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page_id" => 2
 											   ]
 										   ]
 		], $stub);
@@ -143,11 +143,11 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 										   "contents_group" => [
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page" => 2
 											   ],
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page_id" => 2
 											   ]
 										   ]
 		], $stub);
@@ -181,11 +181,11 @@ class LayoutOptimizerOptionTest extends WP_UnitTestCase {
 										   "contents_group" => [
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page_id" => 2
 											   ],
 											   [
 												   "query" =>  ["dir" => "/"],
-												   "optimize_page" => "/sample-page"
+												   "optimize_page_id" => 2
 											   ]
 										   ]
 		], $stub);
