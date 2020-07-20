@@ -6,9 +6,9 @@
 	cp .env.sample .env
 	docker-compose build
     docker-compose up -d
-	docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/my-plugin; composer install"
-	docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/my-plugin; npm install"	
-	docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/my-plugin; npx webpack --mode=development"	
+	docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/layout-optimizer-plugin; composer install"
+	docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/layout-optimizer-plugin; npm install"	
+	docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/layout-optimizer-plugin; npx webpack --mode=development"	
 
 ### WordPressの設定
 
@@ -22,20 +22,20 @@
 localボリュームに永続化しているので、1回だけやればOK
 MySQLのrootパスワードは.envファイルで設定したMYSQL_ROOT_PASSWORDを指定する。
 
-    docker-compose exec wordpress bash -c "/var/www/html/wp-content/plugins/layout-optimizer/bin/install-wp-tests.sh wordpress_test root 'wordpress' db latest"
+    docker-compose exec wordpress bash -c "/var/www/html/wp-content/plugins/layout-optimizer-plugin/bin/install-wp-tests.sh wordpress_test root 'wordpress' db latest"
 
 
 ### PHPUnitの実行
 
-    docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/my-plugin; vendor/bin/phpunit"
+    docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/layout-optimizer-plugin; vendor/bin/phpunit"
 
 ### phpcsの実行
 
-    docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/my-plugin; composer phpcs"
+    docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/layout-optimizer-plugin; composer phpcs"
 
 ### phpcbf(自動フォーマット)の実行
 
-    docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/my-plugin; composer phpcbf"
+    docker-compose exec wordpress bash -c "cd /var/www/html/wp-content/plugins/layout-optimizer-plugin; composer phpcbf"
 
 ### リリース方法
 

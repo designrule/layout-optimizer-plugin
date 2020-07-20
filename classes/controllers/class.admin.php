@@ -55,12 +55,15 @@ class LayoutOptimizerAdminController {
 				// 保存処理
 				$data = LayoutOptimizerOption::find();
 				$data->options['view_id'] = ! empty( $_POST['view_id'] ) ? filter_input( INPUT_POST, "view_id", FILTER_VALIDATE_INT) : '';
+				$optimize_page_id = filter_input( INPUT_POST, "optimize_page_id", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 				$optimize_page = filter_input( INPUT_POST, "optimize_page", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 				$dir = filter_input( INPUT_POST, "dir", FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 				$data->options["contents_group"] = [];
 				for ( $i = 0 ; $i<LayoutOptimizerConfig::CONTENTS_GROUP_COUNT; $i++ ) {
-					$contents_group = ["optimize_page" => $optimize_page[$i],
-									   "query" => [ "dir" => $dir[$i] ] ];
+					$contents_group = [
+						"optimize_page_id" => $optimize_page_id[$i],
+						"optimize_page" => $optimize_page[$i],
+						"query" => [ "dir" => $dir[$i] ] ];
 					$data->options["contents_group"][] = $contents_group;
 				}
 				if ( $data->options['view_id'] === false ) {

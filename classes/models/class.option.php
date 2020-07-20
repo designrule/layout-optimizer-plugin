@@ -70,8 +70,12 @@ class LayoutOptimizerOption {
 				];
 			}
 			for ( $j = 0; $j < count($res["pages"]); $j++ ) {
-				$res["pages"][$j]["post_id"] = url_to_postid($res["pages"][$j]["path"]);
-				$res["pages"][$j]["optimize_page_id"] = url_to_postid($this->options["contents_group"][$i]["optimize_page"]);
+				$res["pages"][$j]["post_id"] = $this->url_to_postid($res["pages"][$j]["path"]);
+				if ( !empty($this->options["contents_group"][$i]["optimize_page_id"]) ) {
+					$res["pages"][$j]["optimize_page_id"] = $this->options["contents_group"][$i]["optimize_page_id"];
+				}else {
+					$res["pages"][$j]["optimize_page_id"] = $this->url_to_postid($this->options["contents_group"][$i]["optimize_page"]);
+				}
 			}
 			$pv_list = array_merge($pv_list, $res["pages"]);
 			$this->options["contents_group"][$i]["theme"] = $res['theme'];
@@ -85,7 +89,12 @@ class LayoutOptimizerOption {
 	function change_theme() {
 		foreach ( $this->options["contents_group"] as $contents_group ) {
 			if ( ! empty( $contents_group['theme'] ) || empty( $contents_group['optimize_page'] ) ) {
-				$post_id = url_to_postid($contents_group['optimize_page']);
+				$post_id = 0;
+				if ( !empty($contents_group['optimize_page_id']) ) {
+					$post_id = $contents_group['optimize_page_id'];
+				}else {
+					$post_id = $this->url_to_postid($contents_group['optimize_page']);
+				}
 				if ( $post_id == 0 ) {
 					continue;
 				}
@@ -101,5 +110,25 @@ class LayoutOptimizerOption {
 	}
 	function is_api_login() {
 		return ! ( empty( $this->options['uid'] ) || empty( $this->options['client'] ) || empty( $this->options['expiry'] ) || empty( $this->options['access_token'] ) );
+	}
+	function url_to_postid( $url ) {
+		// First, check to see if there is a 'p=N' or 'page_id=N' to match against.
+		if ( preg_match( '#[?&](p|page_id|attachment_id)=(\d+)#', $url, $values ) ) {
+			$id = absint( $values[2] );
+			if ( $id ) {
+				return $id;
+			}
+		}
+		$parsed = parse_url($url);
+		if ( $parsed == false ) {
+			return 0;
+		}
+		if ( preg_match( '#(\d+)$#', $parsed["path"], $values ) ) {
+			$id = absint( $values[1] );
+			if ( $id ) {
+				return $id;
+			}
+		}
+		return 0;
 	}
 }
