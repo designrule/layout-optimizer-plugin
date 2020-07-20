@@ -71,11 +71,7 @@ class LayoutOptimizerOption {
 			}
 			for ( $j = 0; $j < count($res["pages"]); $j++ ) {
 				$res["pages"][$j]["post_id"] = $this->url_to_postid($res["pages"][$j]["path"]);
-				if ( !empty($this->options["contents_group"][$i]["optimize_page_id"]) ) {
-					$res["pages"][$j]["optimize_page_id"] = $this->options["contents_group"][$i]["optimize_page_id"];
-				}else {
-					$res["pages"][$j]["optimize_page_id"] = $this->url_to_postid($this->options["contents_group"][$i]["optimize_page"]);
-				}
+				$res["pages"][$j]["optimize_page_id"] = $this->options["contents_group"][$i]["optimize_page_id"];
 			}
 			$pv_list = array_merge($pv_list, $res["pages"]);
 			$this->options["contents_group"][$i]["theme"] = $res['theme'];
@@ -89,13 +85,8 @@ class LayoutOptimizerOption {
 	function change_theme() {
 		foreach ( $this->options["contents_group"] as $contents_group ) {
 			if ( ! empty( $contents_group['theme'] ) || empty( $contents_group['optimize_page'] ) ) {
-				$post_id = 0;
-				if ( !empty($contents_group['optimize_page_id']) ) {
-					$post_id = $contents_group['optimize_page_id'];
-				}else {
-					$post_id = $this->url_to_postid($contents_group['optimize_page']);
-				}
-				if ( $post_id == 0 ) {
+				$post_id = $contents_group['optimize_page_id'];
+				if ( empty($post_id) ) {
 					continue;
 				}
 				if ( 'A' === $contents_group['theme'] ) {
