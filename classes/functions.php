@@ -8,7 +8,7 @@ function layout_optimizer_join( $join ) {
 	if ( !layout_optimizer_is_optimize_page() ) {
 		return $join;
 	}
-	$join .= " INNER JOIN {$wpdb->prefix}googleanalytics ON $wpdb->posts.ID = wp_googleanalytics.post_id ";
+	$join .= " LEFT JOIN {$wpdb->prefix}googleanalytics ON $wpdb->posts.ID = wp_googleanalytics.post_id ";
 	return $join;
 }
 
@@ -18,9 +18,7 @@ function layout_optimizer_where( $where ) {
 		return $where;
 	}
 	$optimize_page_id = get_the_ID();
-	//var_dump($optimize_page_id);
-	//$where .= " AND wp_googleanalytics.contents_group = 0 ";
-	$where .= $wpdb->prepare(" AND {$wpdb->prefix}googleanalytics.optimize_page_id = %d ", $optimize_page_id);
+	$where .= $wpdb->prepare(" AND ({$wpdb->prefix}googleanalytics.optimize_page_id = %d OR {$wpdb->prefix}googleanalytics.optimize_page_id IS NULL) " , $optimize_page_id);
 	return $where;
 }
 
@@ -29,7 +27,7 @@ function layout_optimizer_orderby( $where ) {
 	if ( !layout_optimizer_is_optimize_page() ) {
 		return $where;
 	}
-	$where =  " {$wpdb->prefix}googleanalytics.pv DESC ";
+	$where =  " {$wpdb->prefix}googleanalytics.pv DESC,rand() ";
 	return $where;
 }
 add_filter('posts_join', 'layout_optimizer_join' );
