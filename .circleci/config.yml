@@ -51,7 +51,7 @@ job-references:
             vendor/bin/phpunit
             WP_MULTISITE=1 vendor/bin/phpunit
 jobs:
-  php74build:
+  php74-build:
     <<: *php_job
     docker:
       - image: circleci/php:7.4
