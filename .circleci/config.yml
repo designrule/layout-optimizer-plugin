@@ -2,10 +2,10 @@ workflows:
   version: 2
   main:
     jobs:
-      - php73-build
+      - php74-build
       - publish:
           requires:
-            - php73-build
+            - php74-build
           filters:
             branches:
               only:
@@ -29,7 +29,7 @@ job-references:
       sudo apt-get update && sudo apt-get install -y subversion zip wget less
       sudo -E docker-php-ext-install mysqli
       sudo apt-get update && sudo apt-get install default-mysql-client
-      sudo sh -c "curl -sL https://deb.nodesource.com/setup_10.x | bash -"
+      sudo sh -c "curl -sL https://deb.nodesource.com/setup_14.x | bash -"
       sudo apt-get update && sudo apt-get install -y nodejs
 
   php_job: &php_job
@@ -51,15 +51,15 @@ job-references:
             vendor/bin/phpunit
             WP_MULTISITE=1 vendor/bin/phpunit
 jobs:
-  php73-build:
+  php74-build:
     <<: *php_job
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.4
       - image: *mysql_image
 
   publish:
     docker:
-      - image: circleci/php:7.3
+      - image: circleci/php:7.4
     steps:
       - checkout
       - add_ssh_keys
